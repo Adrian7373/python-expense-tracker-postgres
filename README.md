@@ -1,10 +1,12 @@
+---
 # 💰 Python Expense Tracker (PostgreSQL)
 
-A simple **Expense Tracker** built with **Python** and **PostgreSQL**, where users can record expenses, manage categories, and view spending records.
+A simple **Expense Tracker** built with **Python** and **PostgreSQL**, where users can record expenses, manage categories, and maintain personal spending records — all from the terminal.
 
 ---
 
 ## 👤 Author
+
 **Adrian Ablaza**  
 🎓 BSIT Major in Database Systems Technology  
 🏫 Nueva Ecija University of Science and Technology  
@@ -20,60 +22,82 @@ A simple **Expense Tracker** built with **Python** and **PostgreSQL**, where use
 ✅ Record expenses using **user name** and **category name** (no need to know IDs!)  
 ✅ Automatically stores current timestamp for each transaction  
 ✅ Proper error handling and rollback for database operations  
+✅ Organized menu-based terminal interface  
+
+---
+
+## 🗂️ Project Structure
+
+```
+
+📦 python-expense-tracker-postgres
+┣ 📄 main.py          ← main Python program
+┣ 📄 schema.sql       ← database schema and sample data
+┣ 📄 .gitignore       ← ignored files list
+┗ 📄 README.md        ← documentation
+
+````
 
 ---
 
 ## ⚙️ Setup Instructions
 
-1. **Clone this repository**
+### 1️⃣ Clone this repository
 ```bash
-   git clone https://github.com/Adrian7373/python-expense-tracker-postgres.git
-   cd python-expense-tracker-postgres
+git clone https://github.com/Adrian7373/python-expense-tracker-postgres.git
+cd python-expense-tracker-postgres
 ````
 
-2. **Install dependencies**
+### 2️⃣ Install dependencies
 
-   ```bash
-   pip install psycopg2
-   ```
+Make sure you have **Python 3** and **PostgreSQL** installed, then install the required Python library:
 
-3. **Create the database**
-   Open PostgreSQL and run:
+```bash
+pip install psycopg2
+```
 
-   ```sql
-   CREATE DATABASE practice;
-   ```
+### 3️⃣ Create the database
 
-4. **Run the schema file**
-   Create a file named `schema.sql` and paste the following:
+Open your PostgreSQL terminal or pgAdmin and run:
 
-   ```sql
-   CREATE TABLE users (
-       id SERIAL PRIMARY KEY,
-       name VARCHAR(100) NOT NULL,
-       email VARCHAR(255) UNIQUE NOT NULL
-   );
+```sql
+CREATE DATABASE practice;
+```
 
-   CREATE TABLE categories (
-       id SERIAL PRIMARY KEY,
-       name VARCHAR(100) UNIQUE NOT NULL
-   );
+### 4️⃣ Set up tables and sample data
 
-   CREATE TABLE expenses (
-       id SERIAL PRIMARY KEY,
-       user_id INT REFERENCES users(id) ON DELETE CASCADE,
-       category_id INT REFERENCES categories(id) ON DELETE CASCADE,
-       amount NUMERIC(10,2) NOT NULL,
-       description TEXT,
-       trans_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-   );
-   ```
+Run the schema file:
 
-5. **Run the program**
+```bash
+\i schema.sql
+```
 
-   ```bash
-   python main.py
-   ```
+*(You can also copy its contents into pgAdmin and execute manually.)*
+
+### 5️⃣ Run the application
+
+```bash
+python main.py
+```
+
+---
+
+## 🧠 How It Works
+
+* The program connects to your PostgreSQL database using **psycopg2**.
+* Users can add, delete, and view data directly through a terminal interface.
+* When adding an expense, the program automatically finds the corresponding **user ID** and **category ID** based on their names — you never need to know them manually.
+* Every transaction automatically includes the current date and time.
+
+---
+
+## 🧱 Database Schema Overview
+
+| Table        | Description                                                    |
+| ------------ | -------------------------------------------------------------- |
+| `users`      | Stores user names and emails.                                  |
+| `categories` | Stores expense category names.                                 |
+| `expenses`   | Links users and categories with amount, description, and date. |
 
 ---
 
@@ -85,6 +109,7 @@ This project is licensed under the **MIT License** — free to use, modify, and 
 
 ## ⭐ Support
 
-If you found this project helpful, consider **starring ⭐ this repo** to support future improvements!
+If you found this project helpful, please consider **starring ⭐ the repository** — it helps others discover it and motivates future improvements!
+---
 
-```
+🧩 *Made with Python, PostgreSQL, and passion for learning.*
