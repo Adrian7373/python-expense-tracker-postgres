@@ -1,4 +1,3 @@
-````markdown
 # 💰 Python Expense Tracker (PostgreSQL)
 
 A simple **Expense Tracker** built with **Python** and **PostgreSQL**, where users can record expenses, manage categories, and view spending records.
@@ -27,7 +26,7 @@ A simple **Expense Tracker** built with **Python** and **PostgreSQL**, where use
 ## ⚙️ Setup Instructions
 
 1. **Clone this repository**
-   ```bash
+```bash
    git clone https://github.com/Adrian7373/python-expense-tracker-postgres.git
    cd python-expense-tracker-postgres
 ````
