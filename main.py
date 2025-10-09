@@ -1,4 +1,5 @@
 import psycopg2
+import re
 
 def viewRecord():
     cur.execute("""
@@ -14,35 +15,35 @@ def viewRecord():
         print(f"User: {row[0]} | Category:{row[1]} | Amount: {row[2]} | Description:{row[3]} | Timestamp:{row[4]}")
 
 def addRecord():
-    newRecordName = input("Enter your name: ").strip().title()
-    cur.execute("SELECT id FROM users WHERE name=%s", (newRecordName,))
-    row = cur.fetchone()
-    if not row:
-        print("User not found")
-        return
+    while True:
+        newRecordName = input("Enter your name: ").strip().title()
+        if newRecordName.isdigit() or not bool(newRecordName):
+            print("Invalid Input! Should only contain letters and must not be empty")
+        else:
+            break
     while True:
         newRecordCat = input("Enter category name: ").strip().title()
-        cur.execute("SELECT id from categories WHERE name=%s", (newRecordCat,))
-        cat_row = cur.fetchone()
-        if not cat_row:
-            print("Category not found!")
+        if newRecordCat.isdigit() or not bool(newRecordCat):
+            print("Invalid Input! Should only contain letters and must not be empty")
         else:
-            while True:
-                try:
-                    newRecordAmount = float(input("Enter amount: "))
-                    break
-                except ValueError:
-                    print("Invalid Input! Please input a numeric value.")
-            newRecordCat = cat_row[0]
-            newRecordDesc = input("Enter description: ")
-            try:
-                cur.execute("INSERT INTO expenses(user_id,category_id,amount,description,trans_date) VALUES (%s,%s,%s,%s,CURRENT_TIMESTAMP)", (row[0],cat_row[0],newRecordAmount,newRecordDesc,))
-                con.commit()
-                print("Record successfully added!")
+            break
+    while True:
+        try:
+            newRecordAmount = float(input("Enter amount: "))
+            if not newRecordAmount:
+                print("Amount must not be empty!")
+            else:
                 break
-            except Exception as e:
-                con.rollback()
-                print("Error adding record: ",e)
+        except ValueError:
+            print("Invalid Input! Please input a numeric value.")
+    newRecordDesc = input("Enter description: ")
+    try:
+        cur.execute("CALL expense_addRecord(%s,%s,%s,%s)",(newRecordName,newRecordCat,newRecordAmount,newRecordDesc))
+        con.commit()
+        print("Record successfully added!")
+    except Exception as e:
+        con.rollback()
+        print("Error adding record: ",e)
 
 
 
@@ -95,8 +96,8 @@ def addUser():
     while True:
         newUserName = input("Enter user name: ").strip().title()
         if newUserName:
-            newUserEmail = input("Enter valid email: ")
-            if "@" in newUserEmail and "." in newUserEmail:
+            newUserEmail = input("Enter valid email: ").strip()
+            if re.match(r"^[\w\.-]+@[\w\.-]+\.\w+$", newUserEmail):
                 try:
                     cur.execute("INSERT INTO users(name,email) VALUES (%s,%s)", (newUserName,newUserEmail,))
                     con.commit()
@@ -122,7 +123,7 @@ def mainMenu():
         print("5. View records")
         print("6. Exit")
         choice = input("Input choice: ")
-        if choice in ("1","2","3","4","5"):
+        if choice in ("1","2","3","4","5","6"):
             return choice
         else:
             print("Invalid input!")
