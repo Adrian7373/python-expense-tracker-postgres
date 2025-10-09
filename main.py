@@ -1,4 +1,5 @@
 import psycopg2
+from tabulate import tabulate
 
 def viewRecord():
     cur.execute("""
@@ -10,8 +11,8 @@ def viewRecord():
     """)
     rows = cur.fetchall()
     print("\n-----Expense Records------")
-    for row in rows:
-        print(f"User: {row[0]} | Category:{row[1]} | Amount: {row[2]} | Description:{row[3]} | Timestamp:{row[4]}")
+    print(tabulate(rows, headers=["User","Category","Amount","Description","Timestamp"], tablefmt="grid"))
+
 
 def addRecord():
     newRecordName = input("Enter your name: ").strip().title()
